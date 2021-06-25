@@ -3,6 +3,7 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
+const { socketController } = require('./controllers/socket.controllers');
 
 class Server {
     constructor() {
@@ -24,17 +25,7 @@ class Server {
     }
 
     sockets() {
-        this.io.on('connection', socket => {
-            console.log('Client connected', socket.id);
-            
-            socket.on('disconnect', () => {
-                console.log('Client disconnected', socket.id);
-            });
-
-            socket.on('send-msg', (payload) => {
-                console.log(payload);
-            });
-        });
+        this.io.on('connection', socketController);
     }
 
     listen() {

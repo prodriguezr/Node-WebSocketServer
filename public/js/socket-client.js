@@ -7,7 +7,7 @@ const btnSend    = document.querySelector('#btnSend');
 const socket = io();
 
 socket.on('connect', () => {
-    console.log('Connected');
+    //console.log('Connected');
 
     lblOffline.style.display = 'none';
     lblOnline.style.display = '';
@@ -15,11 +15,15 @@ socket.on('connect', () => {
 });
 
 socket.on('disconnect', () => {
-    console.log('Disconnected');
+    //console.log('Disconnected');
     
     lblOnline.style.display = 'none';
     lblOffline.style.display = '';
     btnSend.style.display = 'none';
+});
+
+socket.on('send-msg', (payload) => {
+    console.log(payload);
 });
 
 btnSend.addEventListener('click', () => {
@@ -31,7 +35,9 @@ btnSend.addEventListener('click', () => {
         time: new Date().getTime(), 
     }
 
-    socket.emit('send-msg', payload);
+    socket.emit('send-msg', payload, (id) => {
+        console.log('From server', id);
+    });
 
     txtMessage.value = '';
 });
