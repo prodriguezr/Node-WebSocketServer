@@ -1,6 +1,8 @@
 // HTML Refs
 const lblOnline  = document.querySelector('#lblOnline');
 const lblOffline = document.querySelector('#lblOffline');
+const txtMessage = document.querySelector('#txtMessage');
+const btnSend    = document.querySelector('#btnSend');
 
 const socket = io();
 
@@ -9,6 +11,7 @@ socket.on('connect', () => {
 
     lblOffline.style.display = 'none';
     lblOnline.style.display = '';
+    btnSend.style.display = '';
 });
 
 socket.on('disconnect', () => {
@@ -16,4 +19,19 @@ socket.on('disconnect', () => {
     
     lblOnline.style.display = 'none';
     lblOffline.style.display = '';
+    btnSend.style.display = 'none';
+});
+
+btnSend.addEventListener('click', () => {
+    const msg = txtMessage.value;
+
+    const payload = {
+        msg,
+        id: socket.id,
+        time: new Date().getTime(), 
+    }
+
+    socket.emit('send-msg', payload);
+
+    txtMessage.value = '';
 });
